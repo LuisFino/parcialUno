@@ -24,13 +24,6 @@ public class ServicioEsudianteTest {
         servicioEstudiante = new ServicioEstudiante(estudiantesRegistradosMock);
     }
 
-//    @Test
-//    public void testContarTotalEstudiantes_conEstudiantes() {
-//        when(estudiantesRegistradosMock.obtenerEstudiantes()).thenReturn(Arrays.asList("123", "456"));
-//        int total = servicioEstudiante.contarTotalEstudiantes();
-//        assertEquals(2, total);
-//        verify(estudiantesRegistradosMock).obtenerEstudiantes();
-//    }
 
     @Test
     public void testContarTotalEstudiantes_sinEstudiantes() {
@@ -42,15 +35,6 @@ public class ServicioEsudianteTest {
         verify(estudiantesRegistradosMock).obtenerEstudiantes();
     }
 
-//    @Test
-//    public void testEsEstudianteRegistrado_conEstudianteExistente() {
-//        when(estudiantesRegistradosMock.buscarPorMatricula("123")).thenReturn("123");
-//
-//        boolean registrado = servicioEstudiante.esEstudianteRegistrado("123");
-//
-//        assertTrue(registrado);
-//        verify(estudiantesRegistradosMock).buscarPorMatricula("123");
-//    }
 
     @Test
     public void testEsEstudianteRegistrado_conEstudianteInexistente() {
@@ -62,5 +46,46 @@ public class ServicioEsudianteTest {
         verify(estudiantesRegistradosMock).buscarPorMatricula("123");
     }
 
+    @Test
+    public void testEsEstudianteRegistrado_conMatriculaNula() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            servicioEstudiante.esEstudianteRegistrado(null);
+        });
 
+        assertEquals("No se admiten matrículas nulas", exception.getMessage());
+    }
+
+    @Test
+    public void testEsEstudianteRegistrado_conMatriculaVacia() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            servicioEstudiante.esEstudianteRegistrado("");
+        });
+
+        assertEquals("No se admiten matrículas nulas", exception.getMessage());
+    }
+
+    @Test
+    public void testEliminarEstudiante_conExito() {
+        when(estudiantesRegistradosMock.eliminarEstudiante("123")).thenReturn(true);
+
+        boolean eliminado = servicioEstudiante.eliminarEstudiante("123");
+
+        assertTrue(eliminado);
+        verify(estudiantesRegistradosMock).eliminarEstudiante("123");
+    }
+
+    @Test
+    public void testEliminarEstudiante_sinExito() {
+        when(estudiantesRegistradosMock.eliminarEstudiante("123")).thenReturn(false);
+
+        boolean eliminado = servicioEstudiante.eliminarEstudiante("123");
+
+        assertFalse(eliminado);
+        verify(estudiantesRegistradosMock).eliminarEstudiante("123");
+    }
+
+    @Test
+    public void testObtenerHorariosAtencion() {
+        assertTrue(servicioEstudiante.obtenerHorariosAtencion());
+    }
 }
